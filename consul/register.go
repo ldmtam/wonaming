@@ -19,7 +19,7 @@ import (
 // target - consul dial address, for example: "127.0.0.1:8500"
 // interval - interval of self-register to etcd
 // ttl - ttl of the register information
-func Register(name string, host string, port int, target string, interval time.Duration, ttl int) error {
+func Register(name string, host string, port int, target string, meta map[string]string, interval time.Duration, ttl int) error {
 	conf := &consul.Config{Scheme: "http", Address: target}
 	client, err := consul.NewClient(conf)
 	if err != nil {
@@ -70,6 +70,7 @@ func Register(name string, host string, port int, target string, interval time.D
 		Name:    name,
 		Address: host,
 		Port:    port,
+		Meta:    meta,
 	}
 	err = client.Agent().ServiceRegister(regis)
 	if err != nil {
